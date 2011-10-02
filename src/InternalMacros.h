@@ -29,14 +29,6 @@
 
 #include <assert.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-	extern void __assert_rtn(const char *, const char *, int, const char *) __attribute__((noreturn));
-#ifdef __cplusplus
-}
-#endif
-
 #define UNW_STEP_SUCCESS 1
 #define UNW_STEP_END     0
 
@@ -49,7 +41,7 @@ struct v128 { unsigned int vec[4]; };
 #define COMPILE_TIME_ASSERT( expr )    \
 		extern int compile_time_assert_failed[ ( expr ) ? 1 : -1 ] __attribute__( ( unused ) );
 
-#define ABORT(msg) __assert_rtn(__func__, __FILE__, __LINE__, msg) 
+#define ABORT(msg) do { fprintf (stderr, "%s: %s:%d: %s\n", __func__, __FILE__, __LINE__, msg); abort(); } while (0)
 
 #if NDEBUG
 	#define DEBUG_MESSAGE(msg, ...)  
